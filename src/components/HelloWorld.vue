@@ -1,96 +1,105 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <h2>Esstial Links</h2>
-    <ul>
-      <li>
-        <a
-          href="https://vuejs.org"
-          target="_blank"
-        >
-          Core Docs
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://forum.vuejs.org"
-          target="_blank"
-        >
-          Forum
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://chat.vuejs.org"
-          target="_blank"
-        >
-          Community Chat
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://twitter.com/vuejs"
-          target="_blank"
-        >
-          Twitter
-        </a>
-      </li>
-      <br>
-      <li>
-        <a
-          href="http://vuejs-templates.github.io/webpack/"
-          target="_blank"
-        >
-          Docs for This Template
-        </a>
-      </li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li>
-        <a
-          href="http://router.vuejs.org/"
-          target="_blank"
-        >
-          vue-router
-        </a>
-      </li>
-      <li>
-        <a
-          href="http://vuex.vuejs.org/"
-          target="_blank"
-        >
-          vuex
-        </a>
-      </li>
-      <li>
-        <a
-          href="http://vue-loader.vuejs.org/"
-          target="_blank"
-        >
-          vue-loader
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://github.com/vuejs/awesome-vue"
-          target="_blank"
-        >
-          awesome-vue
-        </a>
-      </li>
-    </ul>
+  <!-- <el-row>
+    <el-col>
+      <el-col :span="6">样品编号</el-col>
+      <el-col :span="12">样品名称</el-col>
+      <el-col :span="6">操作</el-col>
+    </el-col>
+    <el-divider></el-divider>
+    <el-col v-for="(item, index) in list.items" :key="index" style="padding-bottom: 10px;">
+      <el-col :span="6">{{item.number}}</el-col>
+      <el-col :span="12">{{item.name}}</el-col>
+      <el-col :span="6"><span style="cursor: pointer;" @click="getDetail(item.id)">查看详细</span></el-col>
+      <el-divider></el-divider>
+    </el-col>
+    <el-dialog
+      title="详细"
+      :visible.sync="detaildBox"
+      width="50%">
+      <el-row>
+        <el-col>
+          <el-col :span="8">样品编号</el-col>
+          <el-col :span="6">样品名称</el-col>
+          <el-col :span="6">样品检测项目</el-col>
+          <el-col :span="4">样品检测结果</el-col>
+        </el-col>
+        <el-divider></el-divider>
+        <el-col>
+          <el-col :span="8">{{detail.number}}</el-col>
+          <el-col :span="6">{{detail.name}}</el-col>
+          <el-col :span="6">{{detail.model}}</el-col>
+          <el-col :span="4">{{detail.result}}</el-col>
+          <el-divider></el-divider>
+        </el-col>
+      </el-row>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="detaildBox = false">取 消</el-button>
+        <el-button type="primary" @click="detaildBox = false">确 定</el-button>
+      </span>
+    </el-dialog>
+  </el-row> -->
+  <div>
+    <el-button type="primary" @click="mockData">mock</el-button>
   </div>
 </template>
 
 <script>
+import axios from 'Axios'
+import Axios from 'Axios';
 export default {
-  name: 'HelloWorld',
   data () {
     return {
-      msg: 'hello world'
+      list: '',
+      detail:'',
+      activeName:'',
+      detaildBox: false,
     }
+  },
+  methods:{
+    mockData: function(){
+      axios.post('/user', {
+        firstName: 'Fred',
+        lastName: 'Flintstone'
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    },
+    getdata:function(){
+      let self = this;
+      axios.get('https://lims-dev.im-cc.com/interview/api/restful/query/__::__/model.runtime.sample.Sample/all?equal_filter=model.runtime.sample.Sample.application_id__1')
+      .then(function (response) {
+        console.log(response.data,'res')
+        self.list = response.data;
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    },
+    getDetail:function(id){
+      let self = this;
+      axios.get('https://lims-dev.im-cc.com/interview/api/restful/entity/__::__sample_items.item/model.runtime.sample.Sample/'+id)
+      .then(function (response) {
+        console.log(response.data,'detail')
+        self.detail = response.data;
+        self.detaildBox = true;
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    },
+    seeDetail(){
+      this.detaildBox = true;
+    },
+  },
+  created(){
+    this.getdata();
+    // this.getDetail()
   }
+  
 }
 </script>
 
