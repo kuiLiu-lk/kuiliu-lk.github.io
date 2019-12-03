@@ -1,5 +1,5 @@
 <template>
-  <!-- <el-row>
+  <el-row>
     <el-col>
       <el-col :span="6">样品编号</el-col>
       <el-col :span="12">样品名称</el-col>
@@ -37,10 +37,10 @@
         <el-button type="primary" @click="detaildBox = false">确 定</el-button>
       </span>
     </el-dialog>
-  </el-row> -->
-  <div>
+    <div>
     <el-button type="primary" @click="mockData">mock</el-button>
   </div>
+  </el-row>
 </template>
 
 <script>
